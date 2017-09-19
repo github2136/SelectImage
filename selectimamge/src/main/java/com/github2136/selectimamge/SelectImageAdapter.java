@@ -26,8 +26,8 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
 
     public SelectImageAdapter(Context context, List<SelectImage> list) {
         super(context, list);
-        viewSize = context.getResources().getDisplayMetrics().widthPixels / 3;
-        ImgSize =  viewSize  ;
+        viewSize = (context.getResources().getDisplayMetrics().widthPixels - 5 * 4) / 3;
+        ImgSize = viewSize;
         layoutParams = new RelativeLayout.LayoutParams(viewSize, viewSize);
         selectPosition = new ArrayList<>();
     }
@@ -47,8 +47,8 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
                 .override(ImgSize, ImgSize)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.img_util_select_wiat)
-                .error(R.drawable.img_util_select_fail)
+//                .placeholder(R.drawable.img_util_select_wiat)
+//                .error(R.drawable.img_util_select_fail)
                 .into(ivImage);
         if (selectPosition.contains(position + "")) {
             ibCheck.setImageResource(R.drawable.ic_util_select_checkbox_check);

@@ -8,6 +8,7 @@
 
         <activity
             android:name=".SelectImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.SelectTheme"/>
     </application>
 </manifest>

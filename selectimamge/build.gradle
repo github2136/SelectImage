@@ -28,7 +28,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
-    compile 'com.github.github2136:Android-utils:2b7a863d5a'
+    compile 'com.github.github2136:Android-utils:042e1ff84d'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
 }

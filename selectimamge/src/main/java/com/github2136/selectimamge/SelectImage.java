@@ -10,6 +10,7 @@ import android.net.Uri;
 public class SelectImage {
     /**
      * The description of the image
+     * 图片说明
      * <P>Type: TEXT</P>
      */
     private String description;
@@ -22,18 +23,21 @@ public class SelectImage {
 
     /**
      * Whether the video should be published as private  or private
+     * 是否为私有照片
      * <P>Type: INTEGER</P>
      */
     private int is_private;
 
     /**
      * The latitude where the image was captured.
+     * 纬度
      * <P>Type: DOUBLE</P>
      */
     private double latitude;
 
     /**
      * The longitude where the image was captured.
+     * 经度
      * <P>Type: DOUBLE</P>
      */
     private double longitude;
@@ -41,6 +45,7 @@ public class SelectImage {
     /**
      * The date & time that the image was taken in units
      * of milliseconds since jan 1, 1970.
+     * 1970年1月1日以来，以毫秒为单位拍摄图像的时间。
      * <P>Type: INTEGER</P>
      */
     private int date_taken;
@@ -48,12 +53,14 @@ public class SelectImage {
     /**
      * The orientation for the image expressed as degrees.
      * Only degrees 0, 90, 180, 270 will work.
+     * 旋转角度
      * <P>Type: INTEGER</P>
      */
     private int orientation;
 
     /**
      * The mini thumb id.
+     * 缩略图ID
      * <P>Type: INTEGER</P>
      */
     private int mini_thumb_magic;
@@ -61,6 +68,7 @@ public class SelectImage {
     /**
      * The bucket id of the image. This is a read-only property that
      * is automatically computed from the DATA column.
+     * bucket id自动计算只读列
      * <P>Type: TEXT</P>
      */
     private String bucket_id;
@@ -68,12 +76,14 @@ public class SelectImage {
     /**
      * The bucket display name of the image. This is a read-only property that
      * is automatically computed from the DATA column.
+     * bucket显示的名字自动计算只读列
      * <P>Type: TEXT</P>
      */
     private String bucket_display_name;
 
     /**
      * The unique ID for a row.
+     * 主键ID
      * <P>Type: INTEGER (long)</P>
      */
     private long _id;
@@ -86,6 +96,7 @@ public class SelectImage {
      * this path. Instead of trying to open this path directly, apps should
      * use {@link ContentResolver#openFileDescriptor(Uri, String)} to gain
      * access.
+     * 应用可能没有文件权限，使用ContentResolver.openFileDescriptor(Uri, String)获取
      * <p>
      * Type: TEXT
      */
@@ -93,18 +104,21 @@ public class SelectImage {
 
     /**
      * The size of the file in bytes
+     * 图片大小
      * <P>Type: INTEGER (long)</P>
      */
     private long size;
 
     /**
      * The display name of the file
+     * 图片名称
      * <P>Type: TEXT</P>
      */
     private String display_name;
 
     /**
      * The title of the content
+     * 内容标题
      * <P>Type: TEXT</P>
      */
     private String title;
@@ -112,6 +126,7 @@ public class SelectImage {
     /**
      * The time the file was added to the media provider
      * Units are seconds since 1970.
+     * 添加时间1970年1月1日以来，以毫秒为单位拍摄图像的时间。
      * <P>Type: INTEGER (long)</P>
      */
     private long date_added;
@@ -120,12 +135,14 @@ public class SelectImage {
      * The time the file was last modified
      * Units are seconds since 1970.
      * NOTE: This is for internal use by the media scanner.  Do not modify this field.
+     * 文件修改时间，由系统自动设置
      * <P>Type: INTEGER (long)</P>
      */
     private long date_modified;
 
     /**
      * The MIME type of the file
+     * 文件类型
      * <P>Type: TEXT</P>
      */
     private String mime_type;
@@ -133,11 +150,13 @@ public class SelectImage {
 
     /**
      * The width of the image/video in pixels.
+     * 宽度
      */
     private int width;
 
     /**
      * The height of the image/video in pixels.
+     * 高度
      */
     private int height;
 

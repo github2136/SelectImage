@@ -12,20 +12,50 @@ import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectImageActivity extends AppCompatActivity {
-    private RecyclerView rvImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_util_select_image);
-        rvImages = (RecyclerView) findViewById(R.id.rv_images);
-        SelectImageItemDecoration selectImageItemDecoration = new SelectImageItemDecoration(3, 100, true);
+        Toolbar tbTitle = (Toolbar) findViewById(R.id.tb_title);
+        setSupportActionBar(tbTitle);
+        setTitle("0/10");//标题
+        // getSupportActionBar().setTitle("标题");
+        // getSupportActionBar().setSubtitle("副标题");
+        // getSupportActionBar().setLogo(R.drawable.ic_launcher);
+
+        /* 菜单的监听可以在toolbar里设置，也可以像ActionBar那样，通过Activity的onOptionsItemSelected回调方法来处理 */
+        tbTitle.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+//                    case R.id.action_settings:
+//                        Toast.makeText(MainActivity.this, "action_settings", 0).show();
+//                        break;
+//                    case R.id.action_share:
+//                        Toast.makeText(MainActivity.this, "action_share", 0).show();
+//                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        //显示返回按钮onOptionsItemSelected中监听id固定为android.R.id.home
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        RecyclerView rvImages = (RecyclerView) findViewById(R.id.rv_images);
+        SelectImageItemDecoration selectImageItemDecoration = new SelectImageItemDecoration(3, 5, true);
         rvImages.addItemDecoration(selectImageItemDecoration);
         rvImages.setAdapter(new SelectImageAdapter(this, getImages()));
     }
@@ -99,4 +129,29 @@ public class SelectImageActivity extends AppCompatActivity {
         }
         return images;
     }
+/**
+ * 创建菜单
+ */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.select_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 菜单点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
+    }
+
 }

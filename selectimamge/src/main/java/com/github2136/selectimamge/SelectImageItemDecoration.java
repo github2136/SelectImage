@@ -1,12 +1,14 @@
 package com.github2136.selectimamge;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContentResolverCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,12 +34,10 @@ public class SelectImageItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view); // item position
-        int column = position % mSpanCount; // item column
-
+        int column = position % mSpanCount; // item colum
         if (mIncludeEdge) {
-            outRect.left = mSpacing - column * mSpacing / mSpanCount; // spacing - column * ((1f / spanCount) * spacing)
-            outRect.right = (column + 1) * mSpacing / mSpanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
+            outRect.left = mSpacing - column * mSpacing / mSpanCount;
+            outRect.right = (column + 1) * mSpacing / mSpanCount;
             if (position < mSpanCount) { // top edge
                 outRect.top = mSpacing;
             }
