@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.github2136.selectimamge.SelectImageActivity;
+import com.github2136.selectimamge.activity.SelectImageActivity;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.github2136.selectimamge;
+package com.github2136.selectimamge.other;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;

@@ -8,14 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ToolBar.Theme"
-        app:popupTheme="@style/ToolBar.PopTheme"/>
+<include layout="@layout/view_select_title"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_images"

@@ -1,4 +1,4 @@
-package com.github2136.selectimamge;
+package com.github2136.selectimamge.entity;
 
 import android.content.ContentResolver;
 import android.net.Uri;
