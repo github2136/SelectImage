@@ -1,4 +1,4 @@
-package com.github2136.selectimamge;
+package com.github2136.selectimamge.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.base.ViewHolderRecyclerView;
+import com.github2136.selectimamge.R;
+import com.github2136.selectimamge.entity.SelectImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +49,12 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
                 .override(ImgSize, ImgSize)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .placeholder(R.drawable.img_util_select_wiat)
-//                .error(R.drawable.img_util_select_fail)
+                .error(R.drawable.img_select_fail)
                 .into(ivImage);
         if (selectPosition.contains(position + "")) {
-            ibCheck.setImageResource(R.drawable.ic_util_select_checkbox_check);
+            ibCheck.setImageResource(R.drawable.ic_select_checkbox_check);
         } else {
-            ibCheck.setImageResource(R.drawable.ic_util_select_checkbox_uncheck);
+            ibCheck.setImageResource(R.drawable.ic_select_checkbox_uncheck);
         }
         ibCheck.setOnClickListener(new View.OnClickListener() {
             @Override
