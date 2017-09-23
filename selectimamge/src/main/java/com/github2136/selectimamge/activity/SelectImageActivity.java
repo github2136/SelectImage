@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -21,19 +22,24 @@ import android.widget.Toast;
 import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.selectimamge.R;
 import com.github2136.selectimamge.adapter.SpinnerAdapter;
+import com.github2136.selectimamge.other.MimeType;
 import com.github2136.selectimamge.other.SelectImageItemDecoration;
 import com.github2136.selectimamge.adapter.SelectImageAdapter;
 import com.github2136.selectimamge.entity.SelectImage;
+import com.github2136.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 选择图片
  */
 public class SelectImageActivity extends AppCompatActivity {
+    private static final int REQUEST_FOLDER = 525;
     public static final String ARG_RESULT = "RESULT";
     public static final String ARG_SELECT_COUNT = "SELECT_COUNT";
     private List<String> mFolderName;//文件夹名称
@@ -41,6 +47,7 @@ public class SelectImageActivity extends AppCompatActivity {
     //    private List<SelectImage> mImages;//所有图片
     private int mSelectCount;//可选择图片数量
     private SelectImageAdapter mSelectImageAdapter;
+    private Set<String> mMimeType = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,10 @@ public class SelectImageActivity extends AppCompatActivity {
         setSupportActionBar(tbTitle);
         mSelectCount = getIntent().getIntExtra(ARG_SELECT_COUNT, 0);
         setToolbarTitle(0);
+        mMimeType.add("image/jpeg");
+        mMimeType.add("image/png");
+        mMimeType.add("image/gif");
+
         // getSupportActionBar().setToolbarTitle("标题");
         // getSupportActionBar().setSubtitle("副标题");
         // getSupportActionBar().setLogo(R.drawable.ic_launcher);
@@ -248,7 +259,38 @@ public class SelectImageActivity extends AppCompatActivity {
             intent.putStringArrayListExtra(ARG_RESULT, mSelectImageAdapter.getSelectPaths());
             setResult(RESULT_OK, intent);
             finish();
+        } else if (i == R.id.menu_folder) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(intent, REQUEST_FOLDER);
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_FOLDER:
+                    ArrayList<String> path = new ArrayList<>();
+                    Intent intent = new Intent();
+                    String p = FileUtil.getFileAbsolutePath(this, data.getData());
+
+                    String suffix = MimeTypeMap.getFileExtensionFromUrl(p);
+                    //获取文件后缀
+                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+                    if (mMimeType.contains(mimeTypeMap.getMimeTypeFromExtension(suffix))) {
+                        path.add(p);
+                        intent.putStringArrayListExtra(ARG_RESULT, path);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    } else {
+                        Toast.makeText(this, "非图片类型文件(jpg、png、gif)", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
     }
 }
