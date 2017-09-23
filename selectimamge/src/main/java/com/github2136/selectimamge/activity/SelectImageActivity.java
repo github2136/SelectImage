@@ -8,27 +8,39 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.selectimamge.R;
+import com.github2136.selectimamge.adapter.SpinnerAdapter;
 import com.github2136.selectimamge.other.SelectImageItemDecoration;
 import com.github2136.selectimamge.adapter.SelectImageAdapter;
 import com.github2136.selectimamge.entity.SelectImage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 选择图片
  */
 public class SelectImageActivity extends AppCompatActivity {
-    private List<SelectImage> mImages;
+    public static final String ARG_RESULT = "RESULT";
+    public static final String ARG_SELECT_COUNT = "SELECT_COUNT";
+    private List<String> mFolderName;//文件夹名称
+    private Map<String, List<SelectImage>> mFolderPath;//文件夹名称对应图片
+    //    private List<SelectImage> mImages;//所有图片
+    private int mSelectCount;//可选择图片数量
+    private SelectImageAdapter mSelectImageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +48,9 @@ public class SelectImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_util_select_image);
         Toolbar tbTitle = (Toolbar) findViewById(R.id.tb_title);
         setSupportActionBar(tbTitle);
-        setTitle("0/10");//标题
-        // getSupportActionBar().setTitle("标题");
+        mSelectCount = getIntent().getIntExtra(ARG_SELECT_COUNT, 0);
+        setToolbarTitle(0);
+        // getSupportActionBar().setToolbarTitle("标题");
         // getSupportActionBar().setSubtitle("副标题");
         // getSupportActionBar().setLogo(R.drawable.ic_launcher);
 
@@ -61,45 +74,60 @@ public class SelectImageActivity extends AppCompatActivity {
         //显示返回按钮onOptionsItemSelected中监听id固定为android.R.id.home
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         RecyclerView rvImages = (RecyclerView) findViewById(R.id.rv_images);
         rvImages.setHasFixedSize(true);
         SelectImageItemDecoration selectImageItemDecoration = new SelectImageItemDecoration(3, 5, true);
         rvImages.addItemDecoration(selectImageItemDecoration);
-        mImages = getImages();
-        SelectImageAdapter selectImageAdapter = new SelectImageAdapter(this, mImages);
-        rvImages.setAdapter(selectImageAdapter);
-        selectImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+
+        mFolderName = new ArrayList<>();
+        mFolderName.add("*");//表示全部
+        mFolderPath = new HashMap<>();
+
+        getImages();
+        mSelectImageAdapter = new SelectImageAdapter(this, mFolderPath.get("*"), mSelectCount);
+        rvImages.setAdapter(mSelectImageAdapter);
+        mSelectImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseRecyclerAdapter baseRecyclerAdapter, int i) {
                 Intent intent = new Intent(SelectImageActivity.this, PhotoViewActivity.class);
                 ArrayList<String> path = new ArrayList<>();
-                path.add(mImages.get(i).getData());
+                path.add(mSelectImageAdapter.getItem(i).getData());
                 intent.putStringArrayListExtra(PhotoViewActivity.ARG_PHOTOS, path);
                 startActivity(intent);
             }
         });
-//        rvImages.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
+        mSelectImageAdapter.setOnSelectImageCallback(new SelectImageAdapter.OnSelectChangeCallback() {
+            @Override
+            public void selectChange(int selectCount) {
+                setToolbarTitle(selectCount);
+            }
+        });
+
+        AppCompatSpinner spFolder = (AppCompatSpinner) findViewById(R.id.sp_folder);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, R.layout.item_spinner, mFolderName);
+        spFolder.setAdapter(adapter);
+        adapter.setDropDownViewResource(R.layout.item_spinner_drop);
+        spFolder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSelectImageAdapter.setData(mFolderPath.get(mFolderName.get(position)));
+                mSelectImageAdapter.clearSelectPaths();
+                mSelectImageAdapter.notifyDataSetChanged();
+                setToolbarTitle(0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
     }
 
-    private List<SelectImage> getImages() {
+    private void setToolbarTitle(int selectCount) {
+        setTitle(String.format("%d/%d", selectCount, mSelectCount));//标题
+    }
+
+    private void getImages() {
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor;
+        Cursor cursor = null;
         try {
             cursor = contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
         } catch (Exception e) {
@@ -121,7 +149,6 @@ public class SelectImageActivity extends AppCompatActivity {
             }
             //Permission Denial: reading com.android.providers.media.MediaProvider uri content://media/external/images/media from pid=4833,
             // uid=10059 requires android.permission.READ_EXTERNAL_STORAGE, or grantUriPermission()
-            return null;
         }
         List<SelectImage> images = new ArrayList<>();
         if (cursor != null) {
@@ -149,7 +176,6 @@ public class SelectImageActivity extends AppCompatActivity {
                 int columnIndex19 = cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH);
                 int columnIndex20 = cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT);
 
-
                 do {
                     SelectImage img = new SelectImage();
                     img.setDescription(cursor.getString(columnIndex1));
@@ -175,12 +201,26 @@ public class SelectImageActivity extends AppCompatActivity {
                     img.setWidth(cursor.getInt(columnIndex19));
                     img.setHeight(cursor.getInt(columnIndex20));
 
+                    int index2 = img.getData().lastIndexOf("/");
+                    int index1 = img.getData().substring(0, index2).lastIndexOf("/");
+                    String folderName = img.getData().substring(index1 + 1, index2);
+                    if (!mFolderName.contains(folderName)) {
+                        mFolderName.add(folderName);
+                    }
+                    List<SelectImage> imgs;
+                    if (mFolderPath.containsKey(folderName)) {
+                        imgs = mFolderPath.get(folderName);
+                    } else {
+                        imgs = new ArrayList<>();
+                        mFolderPath.put(folderName, imgs);
+                    }
+                    imgs.add(img);
                     images.add(img);
                 } while (cursor.moveToNext());
             }
             cursor.close();
         }
-        return images;
+        mFolderPath.put("*", images);
     }
 
     /**
@@ -200,12 +240,15 @@ public class SelectImageActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            finish();
+        } else if (i == R.id.menu_ok) {
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra(ARG_RESULT, mSelectImageAdapter.getSelectPaths());
+            setResult(RESULT_OK, intent);
+            finish();
         }
         return true;
     }
-
 }

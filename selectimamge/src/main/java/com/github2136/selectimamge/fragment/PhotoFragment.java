@@ -20,7 +20,6 @@ import com.github2136.selectimamge.R;
 public class PhotoFragment extends Fragment {
     public static final String ARG_PHOTO_PATH = "PHOTO_PATH";
     private String photoPath;
-    private PhotoViewAttacher mAttacher;
     private PhotoView ivPhoto;
 
     public PhotoFragment() { }
@@ -53,6 +52,7 @@ public class PhotoFragment extends Fragment {
         Glide.with(getContext())
                 .load(photoPath)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.img_select_place)
                 .error(R.drawable.img_select_fail)
                 .into(ivPhoto);
     }

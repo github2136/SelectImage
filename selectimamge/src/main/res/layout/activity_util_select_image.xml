@@ -8,7 +8,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<include layout="@layout/view_select_title"/>
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tb_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ToolBar.PopTheme"
+        app:theme="@style/ToolBar.Theme">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_folder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/ToolBar.PopTheme"
+            app:theme="@style/ToolBar.Theme"/>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_images"

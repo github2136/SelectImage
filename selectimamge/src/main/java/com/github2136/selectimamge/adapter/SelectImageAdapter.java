@@ -21,17 +21,28 @@ import java.util.List;
  */
 
 public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
-    List<String> selectPosition;
-    private int viewSize;
-    private int ImgSize;
+    private ArrayList<String> mSelectPaths;
+    private int mViewSize;
+    private int mImgSize;
+    private int mSelectCount;
     private RelativeLayout.LayoutParams layoutParams;
+    private OnSelectChangeCallback mOnSelectChangeCallback;
 
-    public SelectImageAdapter(Context context, List<SelectImage> list) {
+    public SelectImageAdapter(Context context, List<SelectImage> list, int selectCount) {
         super(context, list);
-        viewSize = (context.getResources().getDisplayMetrics().widthPixels - 5 * 4) / 3;
-        ImgSize = viewSize;
-        layoutParams = new RelativeLayout.LayoutParams(viewSize, viewSize);
-        selectPosition = new ArrayList<>();
+        mViewSize = (context.getResources().getDisplayMetrics().widthPixels - 5 * 4) / 3;
+        mImgSize = mViewSize;
+        layoutParams = new RelativeLayout.LayoutParams(mViewSize, mViewSize);
+        mSelectPaths = new ArrayList<>();
+        mSelectCount = selectCount;
+    }
+
+    public void setOnSelectImageCallback(OnSelectChangeCallback onSelectImageCallback) {
+        this.mOnSelectChangeCallback = onSelectImageCallback;
+    }
+
+    public ArrayList<String> getSelectPaths() {
+        return mSelectPaths;
     }
 
     @Override
@@ -46,12 +57,13 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
         ivImage.setLayoutParams(layoutParams);
         Glide.with(mContext)
                 .load(selectImage.getData())
-                .override(ImgSize, ImgSize)
+                .asBitmap()
+                .override(mImgSize, mImgSize)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.img_select_fail)
                 .into(ivImage);
-        if (selectPosition.contains(position + "")) {
+        if (mSelectPaths.contains(selectImage.getData())) {
             ibCheck.setImageResource(R.drawable.ic_select_checkbox_check);
         } else {
             ibCheck.setImageResource(R.drawable.ic_select_checkbox_uncheck);
@@ -59,13 +71,26 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
         ibCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectPosition.contains(position + "")) {
-                    selectPosition.remove(position + "");
+                if (mSelectPaths.contains(selectImage.getData())) {
+                    mSelectPaths.remove(selectImage.getData());
                 } else {
-                    selectPosition.add(position + "");
+                    if (mSelectCount > mSelectPaths.size()) {
+                        mSelectPaths.add(selectImage.getData());
+                    }
                 }
                 notifyItemChanged(position);
+                if (mOnSelectChangeCallback != null) {
+                    mOnSelectChangeCallback.selectChange(mSelectPaths.size());
+                }
             }
         });
+    }
+
+    public void clearSelectPaths() {
+        mSelectPaths = new ArrayList<>();
+    }
+
+    public interface OnSelectChangeCallback {
+        void selectChange(int selectCount);
     }
 }

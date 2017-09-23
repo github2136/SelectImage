@@ -1,5 +1,6 @@
 package com.github2136.selectimamge.activity;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ public class PhotoViewActivity extends AppCompatActivity {
     public static final String ARG_CURRENT_INDEX = "CURRENT_INDEX";
     private List<String> mPhotoPaths;
     private int mCurrentIndex;
+    private SelectViewPager vpPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +31,25 @@ public class PhotoViewActivity extends AppCompatActivity {
         mCurrentIndex = getIntent().getIntExtra(ARG_CURRENT_INDEX, 0);
         Toolbar tbTitle = (Toolbar) findViewById(R.id.tb_title);
         setSupportActionBar(tbTitle);
-        setTitle("0/10");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SelectViewPager vpPhoto = (SelectViewPager) findViewById(R.id.vp_photo);
+        vpPhoto = (SelectViewPager) findViewById(R.id.vp_photo);
         vpPhoto.setAdapter(new PhotoAdapter(getSupportFragmentManager(), mPhotoPaths));
+        vpPhoto.setCurrentItem(mCurrentIndex);
+        vpPhoto.addOnPageChangeListener(mPagerChangeListener);
+        setTitle();
     }
 
-    /**
-     * 创建菜单
-     */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.select_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    private void setTitle() {
+        setTitle(String.format("%d/%d", vpPhoto.getCurrentItem() + 1, mPhotoPaths.size()));//标题
+    }
+
+    ViewPager.SimpleOnPageChangeListener mPagerChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            setTitle();
+        }
+    };
 
     /**
      * 菜单点击事件

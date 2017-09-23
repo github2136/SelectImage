@@ -10,7 +10,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark"/>
+    <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark">
+    </style>
 
-    <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light"/>
+    <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light">
+    </style>
 </resources>
