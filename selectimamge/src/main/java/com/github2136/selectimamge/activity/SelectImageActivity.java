@@ -16,16 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.selectimamge.R;
-import com.github2136.selectimamge.adapter.SpinnerAdapter;
-import com.github2136.selectimamge.other.MimeType;
-import com.github2136.selectimamge.other.SelectImageItemDecoration;
 import com.github2136.selectimamge.adapter.SelectImageAdapter;
+import com.github2136.selectimamge.adapter.SpinnerAdapter;
 import com.github2136.selectimamge.entity.SelectImage;
+import com.github2136.selectimamge.other.SelectImageItemDecoration;
 import com.github2136.util.FileUtil;
 
 import java.util.ArrayList;
@@ -97,7 +95,7 @@ public class SelectImageActivity extends AppCompatActivity {
         getImages();
         mSelectImageAdapter = new SelectImageAdapter(this, mFolderPath.get("*"), mSelectCount);
         rvImages.setAdapter(mSelectImageAdapter);
-        mSelectImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mSelectImageAdapter.setOnItemClickListener(rvImages,new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseRecyclerAdapter baseRecyclerAdapter, int i) {
                 Intent intent = new Intent(SelectImageActivity.this, PhotoViewActivity.class);

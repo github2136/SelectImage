@@ -43,8 +43,8 @@ public class SelectImageItemDecoration extends RecyclerView.ItemDecoration {
             }
             outRect.bottom = mSpacing; // item bottom
         } else {
-            outRect.left = column * mSpacing / mSpanCount; // column * ((1f / spanCount) * spacing)
-            outRect.right = mSpacing - (column + 1) * mSpacing / mSpanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+            outRect.left = column * mSpacing / mSpanCount;
+            outRect.right = mSpacing - (column + 1) * mSpacing / mSpanCount;
             if (position >= mSpanCount) {
                 outRect.top = mSpacing; // item top
             }

@@ -8,7 +8,6 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_folder"
-        android:icon="@drawable/menu_select_folder"
         android:title="文件选择"
         app:showAsAction="never"/>
 </menu>
