@@ -15,6 +15,10 @@
             android:name=".activity.PhotoViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.SelectTheme"/>
+        <activity android:name=".activity.CaptureActivity">
+        </activity>
+        <activity android:name=".activity.CropActivity">
+        </activity>
     </application>
 
 </manifest>

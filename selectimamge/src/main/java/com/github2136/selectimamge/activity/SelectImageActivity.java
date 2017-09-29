@@ -24,6 +24,7 @@ import com.github2136.selectimamge.adapter.SelectImageAdapter;
 import com.github2136.selectimamge.adapter.SpinnerAdapter;
 import com.github2136.selectimamge.entity.SelectImage;
 import com.github2136.selectimamge.other.SelectImageItemDecoration;
+import com.github2136.util.CollectionsUtil;
 import com.github2136.util.FileUtil;
 
 import java.util.ArrayList;
@@ -34,7 +35,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 选择图片
+ * 选择图片<br>
+ * ARG_SELECT_COUNT选择图片数量<br>
+ * ARG_SELECT_COUNT返回的图片路径
  */
 public class SelectImageActivity extends AppCompatActivity {
     private static final int REQUEST_FOLDER = 525;
@@ -42,7 +45,6 @@ public class SelectImageActivity extends AppCompatActivity {
     public static final String ARG_SELECT_COUNT = "SELECT_COUNT";
     private List<String> mFolderName;//文件夹名称
     private Map<String, List<SelectImage>> mFolderPath;//文件夹名称对应图片
-    //    private List<SelectImage> mImages;//所有图片
     private int mSelectCount;//可选择图片数量
     private SelectImageAdapter mSelectImageAdapter;
     private Set<String> mMimeType = new HashSet<>();
@@ -95,7 +97,7 @@ public class SelectImageActivity extends AppCompatActivity {
         getImages();
         mSelectImageAdapter = new SelectImageAdapter(this, mFolderPath.get("*"), mSelectCount);
         rvImages.setAdapter(mSelectImageAdapter);
-        mSelectImageAdapter.setOnItemClickListener(rvImages,new BaseRecyclerAdapter.OnItemClickListener() {
+        mSelectImageAdapter.setOnItemClickListener(rvImages, new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseRecyclerAdapter baseRecyclerAdapter, int i) {
                 Intent intent = new Intent(SelectImageActivity.this, PhotoViewActivity.class);
@@ -253,10 +255,15 @@ public class SelectImageActivity extends AppCompatActivity {
         if (i == android.R.id.home) {
             finish();
         } else if (i == R.id.menu_ok) {
-            Intent intent = new Intent();
-            intent.putStringArrayListExtra(ARG_RESULT, mSelectImageAdapter.getSelectPaths());
-            setResult(RESULT_OK, intent);
-            finish();
+            ArrayList<String> imgs = mSelectImageAdapter.getSelectPaths();
+            if (CollectionsUtil.isNotEmpty(imgs)) {
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra(ARG_RESULT, mSelectImageAdapter.getSelectPaths());
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                Toast.makeText(this, "至少选择一张图片", Toast.LENGTH_SHORT).show();
+            }
         } else if (i == R.id.menu_folder) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
