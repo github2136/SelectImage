@@ -22,7 +22,7 @@ import java.io.File;
  * ARG_CROP_IMG 需要裁剪的图片路径<br>
  * ARG_ASPECT_X/ARG_ASPECT_Y裁剪框比例<br>
  * ARG_OUTPUT_X/ARG_OUTPUT_Y图片输出尺寸<br>
- * 默认存储只外部私有图片目录下，或在application中添加name为select_photo_path的&lt;meta&#62;<br>
+ * 默认存储只外部私有图片目录下，或在application中添加name为select_photo_path的&lt;meta&#62;，私有目录下的图片不能添加到媒体库中，选择图片时将会无法查看到<br>
  * OUTPUT_IMG图片保存路径目录，不包括文件名，优先级比select_photo_path高，可不填<br>
  * ARG_SELECT_COUNT返回的图片路径
  */
