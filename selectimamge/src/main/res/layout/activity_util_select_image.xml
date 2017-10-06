@@ -19,18 +19,21 @@
         app:popupTheme="@style/ToolBar.PopTheme"
         app:theme="@style/ToolBar.Theme">
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/sp_folder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:popupTheme="@style/ToolBar.PopTheme"
-            app:theme="@style/ToolBar.Theme"/>
+
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_images"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:layoutManager="@string/RecyclerView_Grid"
         app:spanCount="3"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sp_folder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/ToolBar.PopTheme"
+        app:theme="@style/ToolBar.PopTheme"/>
 </LinearLayout>

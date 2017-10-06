@@ -97,7 +97,7 @@ public class SelectImageActivity extends AppCompatActivity {
         getImages();
         mSelectImageAdapter = new SelectImageAdapter(this, mFolderPath.get("*"), mSelectCount);
         rvImages.setAdapter(mSelectImageAdapter);
-        mSelectImageAdapter.setOnItemClickListener(rvImages, new BaseRecyclerAdapter.OnItemClickListener() {
+        mSelectImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseRecyclerAdapter baseRecyclerAdapter, int i) {
                 Intent intent = new Intent(SelectImageActivity.this, PhotoViewActivity.class);
