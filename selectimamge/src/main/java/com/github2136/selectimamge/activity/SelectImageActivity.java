@@ -8,14 +8,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.github2136.base.BaseRecyclerAdapter;
@@ -48,6 +45,8 @@ public class SelectImageActivity extends AppCompatActivity {
     private int mSelectCount;//可选择图片数量
     private SelectImageAdapter mSelectImageAdapter;
     private Set<String> mMimeType = new HashSet<>();
+    private AlertDialog mFolderDialog;
+    private String mSelectFolderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,8 @@ public class SelectImageActivity extends AppCompatActivity {
         Toolbar tbTitle = (Toolbar) findViewById(R.id.tb_title);
         setSupportActionBar(tbTitle);
         mSelectCount = getIntent().getIntExtra(ARG_SELECT_COUNT, 0);
-        setToolbarTitle(0);
+        mSelectFolderName = "*";
+        setToolbarTitle(0, mSelectFolderName);
         mMimeType.add("image/jpeg");
         mMimeType.add("image/png");
         mMimeType.add("image/gif");
@@ -110,30 +110,28 @@ public class SelectImageActivity extends AppCompatActivity {
         mSelectImageAdapter.setOnSelectImageCallback(new SelectImageAdapter.OnSelectChangeCallback() {
             @Override
             public void selectChange(int selectCount) {
-                setToolbarTitle(selectCount);
+                setToolbarTitle(selectCount, mSelectFolderName);
             }
         });
-
-        AppCompatSpinner spFolder = (AppCompatSpinner) findViewById(R.id.sp_folder);
         SpinnerAdapter adapter = new SpinnerAdapter(this, R.layout.item_spinner, mFolderName);
-        spFolder.setAdapter(adapter);
-        adapter.setDropDownViewResource(R.layout.item_spinner_drop);
-        spFolder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectImageAdapter.setData(mFolderPath.get(mFolderName.get(position)));
-                mSelectImageAdapter.clearSelectPaths();
-                mSelectImageAdapter.notifyDataSetChanged();
-                setToolbarTitle(0);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });
+        mFolderDialog = new AlertDialog.Builder(this)
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mSelectFolderName = mFolderName.get(which);
+                        mSelectImageAdapter.setData(mFolderPath.get(mSelectFolderName));
+                        mSelectImageAdapter.clearSelectPaths();
+                        mSelectImageAdapter.notifyDataSetChanged();
+                        setToolbarTitle(0, mSelectFolderName);
+                    }
+                }).create();
     }
 
-    private void setToolbarTitle(int selectCount) {
-        setTitle(String.format("%d/%d", selectCount, mSelectCount));//标题
+    private void setToolbarTitle(int selectCount, String folderName) {
+        if (folderName.equals("*")) {
+            folderName = "全部";
+        }
+        setTitle(String.format("%d/%d %s", selectCount, mSelectCount, folderName));//标题
     }
 
     private void getImages() {
@@ -265,6 +263,8 @@ public class SelectImageActivity extends AppCompatActivity {
                 Toast.makeText(this, "至少选择一张图片", Toast.LENGTH_SHORT).show();
             }
         } else if (i == R.id.menu_folder) {
+            mFolderDialog.show();
+        } else if (i == R.id.menu_system) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);

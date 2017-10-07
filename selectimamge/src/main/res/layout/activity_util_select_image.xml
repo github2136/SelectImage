@@ -17,10 +17,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ToolBar.PopTheme"
-        app:theme="@style/ToolBar.Theme">
-
-
-    </android.support.v7.widget.Toolbar>
+        app:theme="@style/ToolBar.Theme"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_images"
@@ -30,10 +27,5 @@
         app:layoutManager="@string/RecyclerView_Grid"
         app:spanCount="3"/>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/sp_folder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:popupTheme="@style/ToolBar.PopTheme"
-        app:theme="@style/ToolBar.PopTheme"/>
+
 </LinearLayout>
