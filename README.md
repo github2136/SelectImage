@@ -1,9 +1,9 @@
 SelectImage  
 [![](https://jitpack.io/v/github2136/SelectImage.svg)](https://jitpack.io/#github2136/SelectImage)  
 使用该库还需要引用以下库  
-**compile 'com.google.code.gson:gson:2.7'**
-**compile 'com.github.github2136:Android-utils:0.0.8'**
-**compile 'com.github.bumptech.glide:glide:3.7.0'**
+**compile 'com.google.code.gson:gson:2.7'**  
+**compile 'com.github.github2136:Android-utils:0.0.8'**  
+**compile 'com.github.bumptech.glide:glide:3.7.0'**  
 **compile 'com.github.chrisbanes:PhotoView:2.1.3'**
 
 **SelectImageActivity**选择图片  
