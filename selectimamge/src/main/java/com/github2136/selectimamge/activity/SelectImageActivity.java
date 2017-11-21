@@ -282,7 +282,7 @@ public class SelectImageActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     String p = FileUtil.getFileAbsolutePath(this, data.getData());
 
-                    String suffix = MimeTypeMap.getFileExtensionFromUrl(p);
+                    String suffix =FileUtil.getSuffix(p);
                     //获取文件后缀
                     MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
