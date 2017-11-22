@@ -12,6 +12,7 @@ import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.base.ViewHolderRecyclerView;
 import com.github2136.selectimamge.R;
 import com.github2136.selectimamge.entity.SelectImage;
+import com.github2136.selectimamge.other.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +56,8 @@ public class SelectImageAdapter extends BaseRecyclerAdapter<SelectImage> {
         ImageView ivImage = holder.getView(R.id.iv_image);
         ImageButton ibCheck = holder.getView(R.id.ib_check);
         ivImage.setLayoutParams(layoutParams);
-        Glide.with(mContext)
+        GlideApp.with(mContext)
                 .load(selectImage.getData())
-                .asBitmap()
                 .override(mImgSize, mImgSize)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
